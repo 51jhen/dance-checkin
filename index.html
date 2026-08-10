@@ -7,10 +7,11 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        content="width=device-width, initial-scale=1.0"
     >
 
     <title>社課簽到</title>
+
 
     <style>
 
@@ -18,134 +19,326 @@
             box-sizing: border-box;
         }
 
+
         body {
-            font-family: Arial, sans-serif;
+            font-family:
+                Arial,
+                "Noto Sans TC",
+                sans-serif;
+
             background-color: #f5f5f5;
+
             margin: 0;
+
             padding: 20px;
-            -webkit-tap-highlight-color: transparent;
         }
+
 
         .container {
+
             width: 100%;
+
             max-width: 450px;
+
             margin: 0 auto;
-            background-color: white;
+
+            background: white;
+
             padding: 25px 20px;
+
             border-radius: 15px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0,0,0,0.08);
         }
 
+
         h1 {
+
             text-align: center;
-            margin-top: 0;
+
+            margin:
+                5px 0 20px;
+        }
+
+
+        h2 {
+
+            margin-top: 25px;
+
+            text-align: center;
+        }
+
+
+        .course-title {
+
+            text-align: center;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
             margin-bottom: 15px;
         }
 
-        h2 {
+
+        .course-button {
+
+            display: block;
+
+            width: 100%;
+
+            min-height: 70px;
+
+            margin:
+                10px 0;
+
+            padding: 15px;
+
+            background: white;
+
+            color: #222;
+
+            border:
+                2px solid #ddd;
+
+            border-radius: 12px;
+
+            text-align: left;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            -webkit-appearance: none;
+
+            appearance: none;
+
+            touch-action: manipulation;
+
+            -webkit-tap-highlight-color:
+                rgba(0,0,0,0.1);
+        }
+
+
+        .course-button:active {
+
+            transform: scale(0.98);
+
+            background: #eeeeee;
+        }
+
+
+        .course-button.selected {
+
+            border:
+                3px solid #222;
+
+            background:
+                #eeeeee;
+        }
+
+
+        .course-name {
+
+            font-weight: bold;
+
+            font-size: 17px;
+        }
+
+
+        .course-time {
+
+            color: #666;
+
+            display: block;
+
+            margin-top: 6px;
+        }
+
+
+        .selected-course {
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            text-align: center;
+
+            border-radius: 8px;
+
+            background: #f1f1f1;
+
+            font-weight: bold;
+        }
+
+
+        label {
+
+            display: block;
+
+            margin-top: 15px;
+
+            margin-bottom: 6px;
+
+            font-weight: bold;
+        }
+
+
+        input {
+
+            display: block;
+
+            width: 100%;
+
+            height: 48px;
+
+            padding:
+                10px 12px;
+
+            border:
+                1px solid #ccc;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            background: white;
+
+            color: #222;
+        }
+
+
+        button.normal-button {
+
+            display: block;
+
+            width: 100%;
+
+            height: 48px;
+
+            margin-top: 15px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            touch-action: manipulation;
+
+            -webkit-tap-highlight-color:
+                transparent;
+        }
+
+
+        .login-button {
+
+            background: #222;
+
+            color: white;
+        }
+
+
+        .admin-button {
+
+            background: #555;
+
+            color: white;
+        }
+
+
+        .checkin-button {
+
+            background: #222;
+
+            color: white;
+
+            font-size: 17px !important;
+
+            font-weight: bold;
+        }
+
+
+        hr {
+
+            border: none;
+
+            border-top:
+                1px solid #ddd;
+
+            margin:
+                25px 0;
+        }
+
+
+        #courseInfo {
+
+            margin-bottom: 10px;
+        }
+
+
+        #studentInfo {
+
+            margin-top: 20px;
+
+            padding-top: 5px;
+        }
+
+
+        #welcomeText {
+
+            text-align: center;
+
+            font-size: 18px;
+
+            font-weight: bold;
+        }
+
+
+        #lessonText {
+
+            text-align: center;
+
+            color: #555;
+        }
+
+
+        #attendanceList {
+
             margin-top: 20px;
         }
 
-        .course {
-            text-align: center;
-            color: #666;
-            margin-bottom: 25px;
-            line-height: 1.8;
-        }
 
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 6px;
-        }
+        .attendance-card {
 
-        input {
-            display: block;
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-            background: white;
-            -webkit-appearance: none;
-        }
+            border:
+                1px solid #ddd;
 
-        button {
-            display: block;
-            width: 100%;
-            margin-top: 15px;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
+            border-radius: 10px;
 
-            /* 手機觸控 */
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .login-button {
-            background-color: #222;
-            color: white;
-        }
-
-        .admin-button {
-            background-color: #555;
-            color: white;
-        }
-
-        .course-select-button {
-            display: block;
-            width: 100%;
+            padding: 12px;
 
             margin-top: 10px;
-            padding: 16px;
 
-            border: 2px solid #ddd;
-            border-radius: 12px;
+            background: #fafafa;
 
-            background-color: white;
-            color: #222;
-
-            text-align: left;
-            font-size: 16px;
-
-            cursor: pointer;
-
-            touch-action: manipulation;
-            pointer-events: auto;
+            line-height: 1.7;
         }
 
-        .course-select-button.selected {
-            border: 2px solid #222;
-            background-color: #f0f0f0;
-        }
-
-        .course-select-button:active {
-            background-color: #eeeeee;
-        }
-
-        hr {
-            border: none;
-            border-top: 1px solid #ddd;
-        }
 
         .success {
+
             color: green;
         }
 
-        .error {
-            color: red;
-        }
 
-        #attendanceList {
-            margin-top: 20px;
+        .error {
+
+            color: red;
         }
 
     </style>
@@ -155,30 +348,32 @@
 
 <body>
 
+
 <div class="container">
 
-    <!-- ========================================== -->
-    <!-- 標題 -->
-    <!-- ========================================== -->
 
-    <h1>🕺 社課簽到</h1>
+    <h1>
+        🕺 社課簽到
+    </h1>
 
 
-    <!-- ========================================== -->
-    <!-- 今天課程 -->
-    <!-- ========================================== -->
+    <!-- ========================= -->
+    <!-- 今日課程 -->
+    <!-- ========================= -->
 
-    <div
-        class="course"
-        id="courseInfo"
-    >
-        課程載入中...
+    <div id="courseInfo">
+
+        📚 課程載入中...
+
     </div>
 
 
-    <!-- ========================================== -->
+    <!-- ========================= -->
     <!-- 社員登入 -->
-    <!-- ========================================== -->
+    <!-- ========================= -->
+
+    <hr>
+
 
     <label for="name">
         姓名
@@ -206,27 +401,24 @@
 
     <button
         type="button"
-        class="login-button"
-        id="loginButton"
+        class="normal-button login-button"
+        onclick="login()"
     >
         繼續
     </button>
 
 
-    <!-- ========================================== -->
+    <!-- ========================= -->
     <!-- 社員資料 -->
-    <!-- ========================================== -->
+    <!-- ========================= -->
 
     <div
         id="studentInfo"
-        style="
-            display:none;
-            margin-top:25px;
-            text-align:center;
-        "
+        style="display:none;"
     >
 
         <hr>
+
 
         <p id="welcomeText"></p>
 
@@ -235,8 +427,8 @@
 
         <button
             type="button"
-            class="login-button"
-            id="checkInButton"
+            class="normal-button checkin-button"
+            onclick="checkIn()"
         >
             🕺 我要簽到
         </button>
@@ -244,14 +436,14 @@
     </div>
 
 
-    <!-- ========================================== -->
+    <!-- ========================= -->
     <!-- 管理員 -->
-    <!-- ========================================== -->
+    <!-- ========================= -->
 
-    <hr style="margin-top:30px;">
+    <hr>
 
 
-    <h2 style="text-align:center;">
+    <h2>
         🔐 管理員
     </h2>
 
@@ -269,33 +461,31 @@
 
     <button
         type="button"
-        class="admin-button"
-        id="adminLoginButton"
+        class="normal-button admin-button"
+        onclick="adminLogin()"
     >
         登入管理員
     </button>
 
 
-    <!-- ========================================== -->
+    <!-- ========================= -->
     <!-- 管理員功能 -->
-    <!-- ========================================== -->
+    <!-- ========================= -->
 
     <div
         id="adminArea"
         style="display:none;"
     >
 
-        <hr style="margin-top:30px;">
+        <hr>
 
 
-        <h2 style="text-align:center;">
+        <h2>
             👑 管理員功能
         </h2>
 
 
-        <!-- ====================================== -->
         <!-- 社員堂數 -->
-        <!-- ====================================== -->
 
         <label for="adminStudentId">
             社員學號
@@ -310,17 +500,8 @@
 
         <button
             type="button"
-            class="admin-button"
-            id="showStudentAdminButton"
-        >
-            👤 查詢社員
-        </button>
-
-
-        <button
-            type="button"
-            class="admin-button"
-            id="addTenLessonsButton"
+            class="normal-button admin-button"
+            onclick="addTenLessons()"
         >
             ➕ 增加 10 堂
         </button>
@@ -328,21 +509,21 @@
 
         <button
             type="button"
-            class="admin-button"
-            id="addOneLessonButton"
+            class="normal-button admin-button"
+            onclick="addOneLesson()"
         >
             ➕ 增加 1 堂
         </button>
 
 
-        <!-- ====================================== -->
-        <!-- 課程管理 -->
-        <!-- ====================================== -->
+        <!-- ========================= -->
+        <!-- 建立課程 -->
+        <!-- ========================= -->
 
-        <hr style="margin-top:30px;">
+        <hr>
 
 
-        <h2 style="text-align:center;">
+        <h2>
             📚 課程管理
         </h2>
 
@@ -390,68 +571,54 @@
 
         <button
             type="button"
-            class="admin-button"
-            id="createCourseButton"
+            class="normal-button admin-button"
+            onclick="createCourse()"
         >
             📚 建立課程
         </button>
 
 
+        <!-- ========================= -->
+        <!-- 簽到紀錄 -->
+        <!-- ========================= -->
+
         <button
             type="button"
-            class="admin-button"
-            id="loadAttendanceButton"
+            class="normal-button admin-button"
+            onclick="loadAttendance()"
         >
             📋 查看簽到紀錄
         </button>
 
 
-        <div
-            id="attendanceList"
-        ></div>
+        <div id="attendanceList"></div>
+
 
     </div>
+
 
 </div>
 
 
-<!-- ========================================== -->
+<!-- ================================================= -->
 <!-- Supabase -->
-<!-- ========================================== -->
+<!-- ================================================= -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
 
-<!-- ========================================== -->
+<!-- ================================================= -->
 <!-- Supabase 設定 -->
-<!-- ========================================== -->
+<!-- ================================================= -->
 
-<script>
-
-const SUPABASE_URL =
-    "https://yefgqzjlddszhnaawvjv.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_zjfUBdwwbVfNl1Z52-4vug_dBdwI2Vy";
+<script src="supabase.js"></script>
 
 
-const db =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-console.log(
-    "✅ Supabase db 建立成功！"
-);
-
-</script>
-
-
-<!-- ========================================== -->
-<!-- 你的 JS -->
-<!-- ========================================== -->
+<!-- ================================================= -->
+<!-- 系統程式 -->
+<!-- ================================================= -->
 
 <script src="script.js"></script>
 
