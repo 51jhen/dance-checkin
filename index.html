@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>社課簽到</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        .course {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 15px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-button {
+            background-color: #222;
+            color: white;
+        }
+
+        .admin-button {
+            background-color: #555;
+            color: white;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🕺 社課簽到</h1>
+
+    <!-- 課程資訊 -->
+    <div class="course" id="courseInfo">
+        課程載入中...
+    </div>
+
+    <!-- ============================== -->
+    <!-- 社員登入 -->
+    <!-- ============================== -->
+
+    <label for="name">姓名</label>
+
+    <input
+        type="text"
+        id="name"
+        placeholder="請輸入姓名"
+    >
+
+    <label for="studentId">學號</label>
+
+    <input
+        type="text"
+        id="studentId"
+        placeholder="請輸入學號"
+    >
+
+    <button
+        class="login-button"
+        onclick="login()"
+    >
+        繼續
+    </button>
+
+
+    <!-- ============================== -->
+    <!-- 社員資料 -->
+    <!-- ============================== -->
+
+    <div
+        id="studentInfo"
+        style="display:none; margin-top:25px; text-align:center;"
+    >
+
+        <hr>
+
+        <p id="welcomeText"></p>
+
+        <p id="lessonText"></p>
+
+        <button
+            class="login-button"
+            onclick="checkIn()"
+        >
+            🕺 我要簽到
+        </button>
+
+    </div>
+
+
+    <!-- ============================== -->
+    <!-- 管理員登入 -->
+    <!-- ============================== -->
+
+    <hr style="margin-top:30px;">
+
+    <h2 style="text-align:center;">
+        🔐 管理員
+    </h2>
+
+    <label for="adminPassword">
+        管理員密碼
+    </label>
+
+    <input
+        type="password"
+        id="adminPassword"
+        placeholder="請輸入管理員密碼"
+    >
+
+    <button
+        class="admin-button"
+        onclick="adminLogin()"
+    >
+        登入管理員
+    </button>
+
+
+    <!-- ============================== -->
+    <!-- 管理員功能 -->
+    <!-- ============================== -->
+
+    <div
+        id="adminArea"
+        style="display:none;"
+    >
+
+        <hr style="margin-top:30px;">
+
+        <h2 style="text-align:center;">
+            👑 管理員功能
+        </h2>
+
+
+        <!-- 增加堂數 -->
+
+        <label for="adminStudentId">
+            社員學號
+        </label>
+
+        <input
+            type="text"
+            id="adminStudentId"
+            placeholder="請輸入社員學號"
+        >
+
+        <button
+            class="admin-button"
+            onclick="addTenLessons()"
+        >
+            ➕ 增加 10 堂
+        </button>
+
+        <button
+            class="admin-button"
+            onclick="addOneLesson()"
+        >
+            ➕ 增加 1 堂
+        </button>
+
+
+        <!-- 課程管理 -->
+
+        <hr style="margin-top:30px;">
+
+        <h2 style="text-align:center;">
+            📚 課程管理
+        </h2>
+
+        <label for="courseName">
+            課程名稱
+        </label>
+
+        <input
+            type="text"
+            id="courseName"
+            placeholder="例如：Hip Hop"
+        >
+
+        <label for="courseDate">
+            課程日期
+        </label>
+
+        <input
+            type="date"
+            id="courseDate"
+        >
+
+        <label for="checkinStart">
+            簽到開始時間
+        </label>
+
+        <input
+            type="time"
+            id="checkinStart"
+        >
+
+        <label for="checkinEnd">
+            簽到截止時間
+        </label>
+
+        <input
+            type="time"
+            id="checkinEnd"
+        >
+
+        <button
+            class="admin-button"
+            onclick="createCourse()"
+        >
+            📚 建立課程
+        </button>
+<button
+    class="admin-button"
+    onclick="loadAttendance()"
+>
+    📋 查看簽到紀錄
+</button>
+
+<div
+    id="attendanceList"
+    style="margin-top:20px;"
+>
+</div>
+    </div>
+
+</div>
+
+
+<!-- Supabase -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
