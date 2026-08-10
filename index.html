@@ -12,16 +12,13 @@
 
     <title>社課簽到</title>
 
-
     <style>
 
         * {
             box-sizing: border-box;
         }
 
-
         body {
-
             font-family:
                 Arial,
                 "Noto Sans TC",
@@ -33,7 +30,6 @@
 
             padding: 20px;
         }
-
 
         .container {
 
@@ -54,154 +50,19 @@
                 rgba(0,0,0,0.08);
         }
 
-
         h1 {
-
             text-align: center;
-
-            margin:
-                5px 0 20px;
+            margin: 5px 0 20px;
         }
-
 
         h2 {
-
             margin-top: 25px;
-
             text-align: center;
         }
 
-
-        hr {
-
-            border: none;
-
-            border-top:
-                1px solid #ddd;
-
-            margin:
-                25px 0;
-        }
-
-
-        label {
-
-            display: block;
-
-            margin-top: 15px;
-
-            margin-bottom: 6px;
-
-            font-weight: bold;
-        }
-
-
-        input {
-
-            display: block;
-
-            width: 100%;
-
-            height: 48px;
-
-            padding:
-                10px 12px;
-
-            border:
-                1px solid #ccc;
-
-            border-radius: 8px;
-
-            font-size: 16px;
-
-            background: white;
-
-            color: #222;
-        }
-
-
-        input:focus {
-
-            outline: none;
-
-            border-color: #222;
-        }
-
-
-        button {
-
-            -webkit-appearance: none;
-
-            appearance: none;
-
-            touch-action: manipulation;
-
-            -webkit-tap-highlight-color:
-                transparent;
-        }
-
-
-        .normal-button {
-
-            display: block;
-
-            width: 100%;
-
-            height: 48px;
-
-            margin-top: 15px;
-
-            border: none;
-
-            border-radius: 8px;
-
-            font-size: 16px;
-
-            cursor: pointer;
-
-            touch-action: manipulation;
-        }
-
-
-        .normal-button:active {
-
-            transform: scale(0.98);
-        }
-
-
-        .login-button {
-
-            background: #222;
-
-            color: white;
-        }
-
-
-        .admin-button {
-
-            background: #555;
-
-            color: white;
-        }
-
-
-        .checkin-button {
-
-            background: #222;
-
-            color: white;
-
-            font-size: 17px;
-
-            font-weight: bold;
-        }
-
-
         #courseInfo {
-
             margin-bottom: 10px;
         }
-
 
         .course-title {
 
@@ -214,7 +75,6 @@
             margin-bottom: 15px;
         }
 
-
         .course-button {
 
             display: block;
@@ -223,8 +83,7 @@
 
             min-height: 70px;
 
-            margin:
-                10px 0;
+            margin: 10px 0;
 
             padding: 15px;
 
@@ -232,8 +91,7 @@
 
             color: #222;
 
-            border:
-                2px solid #ddd;
+            border: 2px solid #ddd;
 
             border-radius: 12px;
 
@@ -251,31 +109,21 @@
 
             -webkit-tap-highlight-color:
                 rgba(0,0,0,0.1);
-
-            user-select: none;
-
-            -webkit-user-select: none;
         }
-
 
         .course-button:active {
 
             transform: scale(0.98);
 
-            background:
-                #eeeeee;
+            background: #eeeeee;
         }
-
 
         .course-button.selected {
 
-            border:
-                3px solid #222;
+            border: 3px solid #222;
 
-            background:
-                #eeeeee;
+            background: #eeeeee;
         }
-
 
         .course-name {
 
@@ -283,7 +131,6 @@
 
             font-size: 17px;
         }
-
 
         .course-time {
 
@@ -293,7 +140,6 @@
 
             margin-top: 6px;
         }
-
 
         .selected-course {
 
@@ -310,6 +156,95 @@
             font-weight: bold;
         }
 
+        label {
+
+            display: block;
+
+            margin-top: 15px;
+
+            margin-bottom: 6px;
+
+            font-weight: bold;
+        }
+
+        input {
+
+            display: block;
+
+            width: 100%;
+
+            height: 48px;
+
+            padding: 10px 12px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            background: white;
+
+            color: #222;
+        }
+
+        button.normal-button {
+
+            display: block;
+
+            width: 100%;
+
+            height: 48px;
+
+            margin-top: 15px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            touch-action: manipulation;
+
+            -webkit-tap-highlight-color:
+                transparent;
+        }
+
+        .login-button {
+
+            background: #222;
+
+            color: white;
+        }
+
+        .admin-button {
+
+            background: #555;
+
+            color: white;
+        }
+
+        .checkin-button {
+
+            background: #222;
+
+            color: white;
+
+            font-size: 17px !important;
+
+            font-weight: bold;
+        }
+
+        hr {
+
+            border: none;
+
+            border-top: 1px solid #ddd;
+
+            margin: 25px 0;
+        }
 
         #studentInfo {
 
@@ -317,7 +252,6 @@
 
             padding-top: 5px;
         }
-
 
         #welcomeText {
 
@@ -328,27 +262,21 @@
             font-weight: bold;
         }
 
-
         #lessonText {
 
             text-align: center;
 
             color: #555;
-
-            line-height: 1.8;
         }
-
 
         #attendanceList {
 
             margin-top: 20px;
         }
 
-
         .attendance-card {
 
-            border:
-                1px solid #ddd;
+            border: 1px solid #ddd;
 
             border-radius: 10px;
 
@@ -361,25 +289,12 @@
             line-height: 1.7;
         }
 
-
-        .success {
-
-            color: green;
-        }
-
-
-        .error {
-
-            color: red;
-        }
-
     </style>
 
 </head>
 
 
 <body>
-
 
 <div class="container">
 
@@ -408,9 +323,11 @@
 
 
     <h2>
-        👤 社員登入
+        👤 社員資料
     </h2>
 
+
+    <!-- 姓名 -->
 
     <label for="name">
         姓名
@@ -424,6 +341,8 @@
     >
 
 
+    <!-- 學號 -->
+
     <label for="loginStudentId">
         學號
     </label>
@@ -436,15 +355,17 @@
     >
 
 
-    <label for="loginDepartment">
+    <!-- 系級 -->
+
+    <label for="department">
         系級
     </label>
 
     <input
         type="text"
-        id="loginDepartment"
-        placeholder="例如：工業一丙"
-        autocomplete="off"
+        id="department"
+        placeholder="例如：經濟系大一"
+        autocomplete="organization"
     >
 
 
@@ -468,8 +389,11 @@
 
         <hr>
 
-
         <p id="welcomeText"></p>
+
+        <p id="studentDepartmentText"
+           style="text-align:center;color:#555;">
+        </p>
 
         <p id="lessonText"></p>
 
@@ -500,7 +424,6 @@
     <label for="adminPassword">
         管理員密碼
     </label>
-
 
     <input
         type="password"
@@ -535,14 +458,11 @@
         </h2>
 
 
-        <!-- ========================= -->
-        <!-- 社員堂數 -->
-        <!-- ========================= -->
+        <!-- 查詢社員 -->
 
         <label for="adminStudentId">
             社員學號
         </label>
-
 
         <input
             type="text"
@@ -556,7 +476,7 @@
             class="normal-button admin-button"
             onclick="showStudentAdmin()"
         >
-            👤 查詢社員
+            🔍 查詢社員
         </button>
 
 
@@ -594,7 +514,6 @@
             課程名稱
         </label>
 
-
         <input
             type="text"
             id="courseName"
@@ -606,7 +525,6 @@
             課程日期
         </label>
 
-
         <input
             type="date"
             id="courseDate"
@@ -617,7 +535,6 @@
             簽到開始時間
         </label>
 
-
         <input
             type="time"
             id="checkinStart"
@@ -627,7 +544,6 @@
         <label for="checkinEnd">
             簽到截止時間
         </label>
-
 
         <input
             type="time"
@@ -666,16 +582,11 @@
 </div>
 
 
-<!-- ================================================== -->
+<!-- ========================= -->
 <!-- Supabase -->
-<!-- ================================================== -->
+<!-- ========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-<!-- ================================================== -->
-<!-- 你的 script -->
-<!-- ================================================== -->
 
 <script src="script.js"></script>
 
