@@ -503,7 +503,7 @@ function adminLogin() {
         document.getElementById("adminPassword").value;
 
     // 測試用管理員密碼
-    const ADMIN_PASSWORD = "123456";
+    const ADMIN_PASSWORD = "06020602";
 
     if (password === ADMIN_PASSWORD) {
 
@@ -618,5 +618,243 @@ async function loadAttendance() {
         attendanceList.innerHTML =
             "❌ 發生錯誤：<br>" +
             error.message;
+    }
+}
+// ==============================
+// 管理員：查詢社員
+// ==============================
+
+async function showStudent() {
+
+    const studentId =
+        document.getElementById("adminStudentId").value.trim();
+
+    if (studentId === "") {
+        alert("請輸入社員學號！");
+        return;
+    }
+
+    try {
+
+        const { data: student, error } = await db
+            .from("students")
+            .select("*")
+            .eq("student ID", studentId)
+            .maybeSingle();
+
+        if (error) {
+
+            console.error(error);
+
+            alert(
+                "❌ 查詢失敗！\n\n" +
+                error.message
+            );
+
+            return;
+        }
+
+        if (!student) {
+
+            alert("❌ 找不到這個社員！");
+
+            return;
+        }
+
+        alert(
+            "👤 社員資料\n\n" +
+            "姓名：" + student.name + "\n" +
+            "學號：" + student["student ID"] + "\n" +
+            "系所：" + (student.department || "尚未設定") + "\n" +
+            "方案：" + (student.plan || "尚未設定") + "\n" +
+            "剩餘堂數：" + (student.lesson || 0) + " 堂"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ 發生錯誤！\n\n" +
+            error.message
+        );
+    }
+}
+
+
+// ==============================
+// 管理員：增加 10 堂
+// ==============================
+
+async function addTenLessons() {
+
+    const studentId =
+        document.getElementById("adminStudentId").value.trim();
+
+    if (studentId === "") {
+
+        alert("請輸入社員學號！");
+
+        return;
+    }
+
+    try {
+
+        const { data: student, error } = await db
+            .from("students")
+            .select("*")
+            .eq("student ID", studentId)
+            .maybeSingle();
+
+        if (error) {
+
+            console.error(error);
+
+            alert(
+                "❌ 查詢失敗！\n\n" +
+                error.message
+            );
+
+            return;
+        }
+
+        if (!student) {
+
+            alert("❌ 找不到這個社員！");
+
+            return;
+        }
+
+        const oldLesson =
+            Number(student.lesson) || 0;
+
+        const newLesson =
+            oldLesson + 10;
+
+        const { error: updateError } = await db
+            .from("students")
+            .update({
+                plan: "10堂",
+                lesson: newLesson
+            })
+            .eq("id", student.id);
+
+        if (updateError) {
+
+            console.error(updateError);
+
+            alert(
+                "❌ 增加 10 堂失敗！\n\n" +
+                updateError.message
+            );
+
+            return;
+        }
+
+        alert(
+            "✅ 已增加 10 堂！\n\n" +
+            "姓名：" + student.name + "\n" +
+            "學號：" + student["student ID"] + "\n" +
+            "原本剩餘：" + oldLesson + " 堂\n" +
+            "現在剩餘：" + newLesson + " 堂"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ 發生錯誤！\n\n" +
+            error.message
+        );
+    }
+}
+
+
+// ==============================
+// 管理員：增加 1 堂
+// ==============================
+
+async function addOneLesson() {
+
+    const studentId =
+        document.getElementById("adminStudentId").value.trim();
+
+    if (studentId === "") {
+
+        alert("請輸入社員學號！");
+
+        return;
+    }
+
+    try {
+
+        const { data: student, error } = await db
+            .from("students")
+            .select("*")
+            .eq("student ID", studentId)
+            .maybeSingle();
+
+        if (error) {
+
+            console.error(error);
+
+            alert(
+                "❌ 查詢失敗！\n\n" +
+                error.message
+            );
+
+            return;
+        }
+
+        if (!student) {
+
+            alert("❌ 找不到這個社員！");
+
+            return;
+        }
+
+        const oldLesson =
+            Number(student.lesson) || 0;
+
+        const newLesson =
+            oldLesson + 1;
+
+        const { error: updateError } = await db
+            .from("students")
+            .update({
+                plan: "單堂",
+                lesson: newLesson
+            })
+            .eq("id", student.id);
+
+        if (updateError) {
+
+            console.error(updateError);
+
+            alert(
+                "❌ 增加 1 堂失敗！\n\n" +
+                updateError.message
+            );
+
+            return;
+        }
+
+        alert(
+            "✅ 已增加 1 堂！\n\n" +
+            "姓名：" + student.name + "\n" +
+            "學號：" + student["student ID"] + "\n" +
+            "原本剩餘：" + oldLesson + " 堂\n" +
+            "現在剩餘：" + newLesson + " 堂"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ 發生錯誤！\n\n" +
+            error.message
+        );
     }
 }
