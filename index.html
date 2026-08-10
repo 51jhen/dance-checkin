@@ -1,347 +1,234 @@
+```html
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>社課簽到</title>
+<title>社課簽到</title>
 
+<style>
 
-    <style>
+* {
+    box-sizing: border-box;
+}
 
-        * {
-            box-sizing: border-box;
-        }
+body {
+    font-family:
+        Arial,
+        "Noto Sans TC",
+        sans-serif;
 
+    background-color: #f5f5f5;
 
-        body {
-            font-family:
-                Arial,
-                "Noto Sans TC",
-                sans-serif;
+    margin: 0;
 
-            background-color: #f5f5f5;
+    padding: 20px;
+}
 
-            margin: 0;
+.container {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    background: white;
+    padding: 25px 20px;
+    border-radius: 15px;
 
-            padding: 20px;
-        }
+    box-shadow:
+        0 2px 10px
+        rgba(0,0,0,0.08);
+}
 
+h1 {
+    text-align: center;
+    margin: 5px 0 20px;
+}
 
-        .container {
+h2 {
+    margin-top: 25px;
+    text-align: center;
+}
 
-            width: 100%;
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
 
-            max-width: 450px;
+input {
+    display: block;
+    width: 100%;
+    height: 48px;
+    padding: 10px 12px;
 
-            margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 
-            background: white;
+    font-size: 16px;
 
-            padding: 25px 20px;
+    background: white;
+    color: #222;
+}
 
-            border-radius: 15px;
+button {
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+}
 
-            box-shadow:
-                0 2px 10px
-                rgba(0,0,0,0.08);
-        }
+.course-button {
+    display: block;
 
+    width: 100%;
+    min-height: 70px;
 
-        h1 {
+    margin: 10px 0;
+    padding: 15px;
 
-            text-align: center;
+    background: white;
+    color: #222;
 
-            margin:
-                5px 0 20px;
-        }
+    border: 2px solid #ddd;
+    border-radius: 12px;
 
+    text-align: left;
 
-        h2 {
+    font-size: 16px;
 
-            margin-top: 25px;
+    cursor: pointer;
 
-            text-align: center;
-        }
+    -webkit-tap-highlight-color:
+        rgba(0,0,0,0.1);
+}
 
+.course-button:active {
+    transform: scale(0.98);
+    background: #eeeeee;
+}
 
-        .course-title {
+.course-button.selected {
+    border: 3px solid #222;
+    background: #eeeeee;
+}
 
-            text-align: center;
+.course-name {
+    font-weight: bold;
+    font-size: 17px;
+}
 
-            font-size: 18px;
+.course-time {
+    color: #666;
+    display: block;
+    margin-top: 6px;
+}
 
-            font-weight: bold;
+.selected-course {
+    margin-top: 15px;
+    padding: 12px;
 
-            margin-bottom: 15px;
-        }
+    text-align: center;
 
+    border-radius: 8px;
 
-        .course-button {
+    background: #f1f1f1;
 
-            display: block;
+    font-weight: bold;
+}
 
-            width: 100%;
+button.normal-button {
+    display: block;
 
-            min-height: 70px;
+    width: 100%;
+    height: 48px;
 
-            margin:
-                10px 0;
+    margin-top: 15px;
 
-            padding: 15px;
+    border: none;
+    border-radius: 8px;
 
-            background: white;
+    font-size: 16px;
 
-            color: #222;
+    cursor: pointer;
 
-            border:
-                2px solid #ddd;
+    touch-action: manipulation;
 
-            border-radius: 12px;
+    -webkit-tap-highlight-color:
+        transparent;
+}
 
-            text-align: left;
+.login-button {
+    background: #222;
+    color: white;
+}
 
-            font-size: 16px;
+.admin-button {
+    background: #555;
+    color: white;
+}
 
-            cursor: pointer;
+.checkin-button {
+    background: #222;
+    color: white;
 
-            -webkit-appearance: none;
+    font-size: 17px !important;
+    font-weight: bold;
+}
 
-            appearance: none;
+hr {
+    border: none;
 
-            touch-action: manipulation;
+    border-top:
+        1px solid #ddd;
 
-            -webkit-tap-highlight-color:
-                rgba(0,0,0,0.1);
-        }
+    margin: 25px 0;
+}
 
+#courseInfo {
+    margin-bottom: 10px;
+}
 
-        .course-button:active {
+#studentInfo {
+    margin-top: 20px;
+    padding-top: 5px;
+}
 
-            transform: scale(0.98);
+#welcomeText {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
 
-            background: #eeeeee;
-        }
+#lessonText {
+    text-align: center;
+    color: #555;
+}
 
+#attendanceList {
+    margin-top: 20px;
+}
 
-        .course-button.selected {
+.attendance-card {
+    border: 1px solid #ddd;
 
-            border:
-                3px solid #222;
+    border-radius: 10px;
 
-            background:
-                #eeeeee;
-        }
+    padding: 12px;
 
+    margin-top: 10px;
 
-        .course-name {
+    background: #fafafa;
 
-            font-weight: bold;
+    line-height: 1.7;
+}
 
-            font-size: 17px;
-        }
-
-
-        .course-time {
-
-            color: #666;
-
-            display: block;
-
-            margin-top: 6px;
-        }
-
-
-        .selected-course {
-
-            margin-top: 15px;
-
-            padding: 12px;
-
-            text-align: center;
-
-            border-radius: 8px;
-
-            background: #f1f1f1;
-
-            font-weight: bold;
-        }
-
-
-        label {
-
-            display: block;
-
-            margin-top: 15px;
-
-            margin-bottom: 6px;
-
-            font-weight: bold;
-        }
-
-
-        input {
-
-            display: block;
-
-            width: 100%;
-
-            height: 48px;
-
-            padding:
-                10px 12px;
-
-            border:
-                1px solid #ccc;
-
-            border-radius: 8px;
-
-            font-size: 16px;
-
-            background: white;
-
-            color: #222;
-        }
-
-
-        button.normal-button {
-
-            display: block;
-
-            width: 100%;
-
-            height: 48px;
-
-            margin-top: 15px;
-
-            border: none;
-
-            border-radius: 8px;
-
-            font-size: 16px;
-
-            cursor: pointer;
-
-            touch-action: manipulation;
-
-            -webkit-tap-highlight-color:
-                transparent;
-        }
-
-
-        .login-button {
-
-            background: #222;
-
-            color: white;
-        }
-
-
-        .admin-button {
-
-            background: #555;
-
-            color: white;
-        }
-
-
-        .checkin-button {
-
-            background: #222;
-
-            color: white;
-
-            font-size: 17px !important;
-
-            font-weight: bold;
-        }
-
-
-        hr {
-
-            border: none;
-
-            border-top:
-                1px solid #ddd;
-
-            margin:
-                25px 0;
-        }
-
-
-        #courseInfo {
-
-            margin-bottom: 10px;
-        }
-
-
-        #studentInfo {
-
-            margin-top: 20px;
-
-            padding-top: 5px;
-        }
-
-
-        #welcomeText {
-
-            text-align: center;
-
-            font-size: 18px;
-
-            font-weight: bold;
-        }
-
-
-        #lessonText {
-
-            text-align: center;
-
-            color: #555;
-        }
-
-
-        #attendanceList {
-
-            margin-top: 20px;
-        }
-
-
-        .attendance-card {
-
-            border:
-                1px solid #ddd;
-
-            border-radius: 10px;
-
-            padding: 12px;
-
-            margin-top: 10px;
-
-            background: #fafafa;
-
-            line-height: 1.7;
-        }
-
-
-        .success {
-
-            color: green;
-        }
-
-
-        .error {
-
-            color: red;
-        }
-
-    </style>
+</style>
 
 </head>
 
@@ -352,273 +239,288 @@
 <div class="container">
 
 
-    <h1>
-        🕺 社課簽到
-    </h1>
+<h1>
+    🕺 社課簽到
+</h1>
 
 
-    <!-- ========================= -->
-    <!-- 今日課程 -->
-    <!-- ========================= -->
+<!-- ========================= -->
+<!-- 今日課程 -->
+<!-- ========================= -->
 
-    <div id="courseInfo">
+<div id="courseInfo">
 
-        📚 課程載入中...
+    📚 課程載入中...
 
-    </div>
+</div>
 
 
-    <!-- ========================= -->
-    <!-- 社員登入 -->
-    <!-- ========================= -->
+<!-- ========================= -->
+<!-- 社員登入 -->
+<!-- ========================= -->
+
+<hr>
+
+
+<h2>
+    👤 社員登入
+</h2>
+
+
+<label for="name">
+    姓名
+</label>
+
+<input
+    type="text"
+    id="name"
+    placeholder="請輸入姓名"
+    autocomplete="name"
+>
+
+
+<label for="loginStudentId">
+    學號
+</label>
+
+<input
+    type="text"
+    id="loginStudentId"
+    placeholder="請輸入學號"
+    autocomplete="off"
+>
+
+
+<p
+    style="
+        text-align:center;
+        color:#666;
+        font-size:14px;
+        margin-top:12px;
+    "
+>
+    系級：工業一丙
+</p>
+
+
+<button
+    type="button"
+    class="normal-button login-button"
+    onclick="login()"
+>
+    繼續
+</button>
+
+
+<!-- ========================= -->
+<!-- 社員資料 -->
+<!-- ========================= -->
+
+<div
+    id="studentInfo"
+    style="display:none;"
+>
 
     <hr>
 
+    <p id="welcomeText"></p>
 
-    <label for="name">
-        姓名
-    </label>
-
-    <input
-        type="text"
-        id="name"
-        placeholder="請輸入姓名"
-        autocomplete="name"
-    >
-
-
-    <label for="loginStudentId">
-        學號
-    </label>
-
-    <input
-        type="text"
-        id="loginStudentId"
-        placeholder="請輸入學號"
-        autocomplete="off"
-    >
-
+    <p id="lessonText"></p>
 
     <button
         type="button"
-        class="normal-button login-button"
-        onclick="login()"
+        class="normal-button checkin-button"
+        onclick="checkIn()"
     >
-        繼續
+        🕺 我要簽到
     </button>
 
-
-    <!-- ========================= -->
-    <!-- 社員資料 -->
-    <!-- ========================= -->
-
-    <div
-        id="studentInfo"
-        style="display:none;"
-    >
-
-        <hr>
+</div>
 
 
-        <p id="welcomeText"></p>
+<!-- ========================= -->
+<!-- 管理員 -->
+<!-- ========================= -->
 
-        <p id="lessonText"></p>
-
-
-        <button
-            type="button"
-            class="normal-button checkin-button"
-            onclick="checkIn()"
-        >
-            🕺 我要簽到
-        </button>
-
-    </div>
+<hr>
 
 
-    <!-- ========================= -->
-    <!-- 管理員 -->
-    <!-- ========================= -->
+<h2>
+    🔐 管理員
+</h2>
+
+
+<label for="adminPassword">
+    管理員密碼
+</label>
+
+<input
+    type="password"
+    id="adminPassword"
+    placeholder="請輸入管理員密碼"
+>
+
+
+<button
+    type="button"
+    class="normal-button admin-button"
+    onclick="adminLogin()"
+>
+    登入管理員
+</button>
+
+
+<!-- ========================= -->
+<!-- 管理員功能 -->
+<!-- ========================= -->
+
+<div
+    id="adminArea"
+    style="display:none;"
+>
 
     <hr>
 
-
     <h2>
-        🔐 管理員
+        👑 管理員功能
     </h2>
 
 
-    <label for="adminPassword">
-        管理員密碼
+    <!-- 社員堂數 -->
+
+    <label for="adminStudentId">
+        社員學號
     </label>
 
     <input
-        type="password"
-        id="adminPassword"
-        placeholder="請輸入管理員密碼"
+        type="text"
+        id="adminStudentId"
+        placeholder="請輸入社員學號"
     >
 
 
     <button
         type="button"
         class="normal-button admin-button"
-        onclick="adminLogin()"
+        onclick="showStudentAdmin()"
     >
-        登入管理員
+        👤 查詢社員
+    </button>
+
+
+    <button
+        type="button"
+        class="normal-button admin-button"
+        onclick="addTenLessons()"
+    >
+        ➕ 增加 10 堂
+    </button>
+
+
+    <button
+        type="button"
+        class="normal-button admin-button"
+        onclick="addOneLesson()"
+    >
+        ➕ 增加 1 堂
     </button>
 
 
     <!-- ========================= -->
-    <!-- 管理員功能 -->
+    <!-- 建立課程 -->
     <!-- ========================= -->
 
-    <div
-        id="adminArea"
-        style="display:none;"
+    <hr>
+
+
+    <h2>
+        📚 課程管理
+    </h2>
+
+
+    <label for="courseName">
+        課程名稱
+    </label>
+
+    <input
+        type="text"
+        id="courseName"
+        placeholder="例如：Hip Hop"
     >
 
-        <hr>
+
+    <label for="courseDate">
+        課程日期
+    </label>
+
+    <input
+        type="date"
+        id="courseDate"
+    >
 
 
-        <h2>
-            👑 管理員功能
-        </h2>
+    <label for="checkinStart">
+        簽到開始時間
+    </label>
+
+    <input
+        type="time"
+        id="checkinStart"
+    >
 
 
-        <!-- 社員堂數 -->
+    <label for="checkinEnd">
+        簽到截止時間
+    </label>
 
-        <label for="adminStudentId">
-            社員學號
-        </label>
-
-        <input
-            type="text"
-            id="adminStudentId"
-            placeholder="請輸入社員學號"
-        >
+    <input
+        type="time"
+        id="checkinEnd"
+    >
 
 
-        <button
-            type="button"
-            class="normal-button admin-button"
-            onclick="addTenLessons()"
-        >
-            ➕ 增加 10 堂
-        </button>
+    <button
+        type="button"
+        class="normal-button admin-button"
+        onclick="createCourse()"
+    >
+        📚 建立課程
+    </button>
 
 
-        <button
-            type="button"
-            class="normal-button admin-button"
-            onclick="addOneLesson()"
-        >
-            ➕ 增加 1 堂
-        </button>
+    <!-- ========================= -->
+    <!-- 簽到紀錄 -->
+    <!-- ========================= -->
+
+    <button
+        type="button"
+        class="normal-button admin-button"
+        onclick="loadAttendance()"
+    >
+        📋 查看簽到紀錄
+    </button>
 
 
-        <!-- ========================= -->
-        <!-- 建立課程 -->
-        <!-- ========================= -->
+    <div id="attendanceList"></div>
 
-        <hr>
-
-
-        <h2>
-            📚 課程管理
-        </h2>
-
-
-        <label for="courseName">
-            課程名稱
-        </label>
-
-        <input
-            type="text"
-            id="courseName"
-            placeholder="例如：Hip Hop"
-        >
-
-
-        <label for="courseDate">
-            課程日期
-        </label>
-
-        <input
-            type="date"
-            id="courseDate"
-        >
-
-
-        <label for="checkinStart">
-            簽到開始時間
-        </label>
-
-        <input
-            type="time"
-            id="checkinStart"
-        >
-
-
-        <label for="checkinEnd">
-            簽到截止時間
-        </label>
-
-        <input
-            type="time"
-            id="checkinEnd"
-        >
-
-
-        <button
-            type="button"
-            class="normal-button admin-button"
-            onclick="createCourse()"
-        >
-            📚 建立課程
-        </button>
-
-
-        <!-- ========================= -->
-        <!-- 簽到紀錄 -->
-        <!-- ========================= -->
-
-        <button
-            type="button"
-            class="normal-button admin-button"
-            onclick="loadAttendance()"
-        >
-            📋 查看簽到紀錄
-        </button>
-
-
-        <div id="attendanceList"></div>
-
-
-    </div>
+</div>
 
 
 </div>
 
 
-<!-- ================================================= -->
+<!-- ========================= -->
 <!-- Supabase -->
-<!-- ================================================= -->
+<!-- ========================= -->
 
 <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 ></script>
 
 
-<!-- ================================================= -->
-<!-- Supabase 設定 -->
-<!-- ================================================= -->
-
-<script src="supabase.js"></script>
-
-
-<!-- ================================================= -->
-<!-- 系統程式 -->
-<!-- ================================================= -->
+<!-- ========================= -->
+<!-- 自己的 JS -->
+<!-- ========================= -->
 
 <script src="script.js"></script>
 
@@ -626,3 +528,4 @@
 </body>
 
 </html>
+```
