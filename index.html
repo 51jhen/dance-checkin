@@ -1,9 +1,7 @@
-```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -13,16 +11,13 @@
 
     <title>社課簽到</title>
 
-
     <style>
-
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
             margin: 0;
             padding: 30px 20px;
         }
-
 
         .container {
             max-width: 450px;
@@ -33,17 +28,14 @@
             box-sizing: border-box;
         }
 
-
         h1 {
             text-align: center;
             margin-bottom: 10px;
         }
 
-
         h2 {
             margin-top: 20px;
         }
-
 
         .course {
             text-align: center;
@@ -52,13 +44,11 @@
             line-height: 1.8;
         }
 
-
         label {
             display: block;
             margin-top: 15px;
             margin-bottom: 5px;
         }
-
 
         input {
             width: 100%;
@@ -68,7 +58,6 @@
             border-radius: 8px;
             font-size: 16px;
         }
-
 
         button {
             width: 100%;
@@ -80,46 +69,49 @@
             cursor: pointer;
         }
 
-
         .login-button {
             background-color: #222;
             color: white;
         }
-
 
         .admin-button {
             background-color: #555;
             color: white;
         }
 
-
         hr {
             border: none;
             border-top: 1px solid #ddd;
         }
 
-    </style>
+        .course-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+            background: #fafafa;
+        }
 
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 
 
 <body>
 
-
 <div class="container">
 
-
-    <!-- ============================== -->
-    <!-- 標題 -->
-    <!-- ============================== -->
-
-    <h1>
-        🕺 社課簽到
-    </h1>
+    <h1>🕺 社課簽到</h1>
 
 
     <!-- ============================== -->
-    <!-- 課程資訊 -->
+    <!-- 今天課程 -->
     <!-- ============================== -->
 
     <div
@@ -128,7 +120,6 @@
     >
         課程載入中...
     </div>
-
 
 
     <!-- ============================== -->
@@ -143,6 +134,7 @@
         type="text"
         id="name"
         placeholder="請輸入姓名"
+        autocomplete="name"
     >
 
 
@@ -154,6 +146,7 @@
         type="text"
         id="loginStudentId"
         placeholder="請輸入學號"
+        autocomplete="off"
     >
 
 
@@ -164,7 +157,6 @@
     >
         繼續
     </button>
-
 
 
     <!-- ============================== -->
@@ -186,7 +178,6 @@
 
         <p id="lessonText"></p>
 
-
         <button
             type="button"
             class="login-button"
@@ -198,9 +189,8 @@
     </div>
 
 
-
     <!-- ============================== -->
-    <!-- 管理員登入 -->
+    <!-- 管理員 -->
     <!-- ============================== -->
 
     <hr style="margin-top:30px;">
@@ -214,7 +204,6 @@
     <label for="adminPassword">
         管理員密碼
     </label>
-
 
     <input
         type="password"
@@ -232,7 +221,6 @@
     </button>
 
 
-
     <!-- ============================== -->
     <!-- 管理員功能 -->
     <!-- ============================== -->
@@ -242,7 +230,6 @@
         style="display:none;"
     >
 
-
         <hr style="margin-top:30px;">
 
 
@@ -251,15 +238,11 @@
         </h2>
 
 
-
-        <!-- ============================== -->
         <!-- 增加堂數 -->
-        <!-- ============================== -->
 
         <label for="adminStudentId">
             社員學號
         </label>
-
 
         <input
             type="text"
@@ -286,10 +269,7 @@
         </button>
 
 
-
-        <!-- ============================== -->
         <!-- 課程管理 -->
-        <!-- ============================== -->
 
         <hr style="margin-top:30px;">
 
@@ -303,7 +283,6 @@
             課程名稱
         </label>
 
-
         <input
             type="text"
             id="courseName"
@@ -315,7 +294,6 @@
             課程日期
         </label>
 
-
         <input
             type="date"
             id="courseDate"
@@ -326,7 +304,6 @@
             簽到開始時間
         </label>
 
-
         <input
             type="time"
             id="checkinStart"
@@ -336,7 +313,6 @@
         <label for="checkinEnd">
             簽到截止時間
         </label>
-
 
         <input
             type="time"
@@ -353,10 +329,7 @@
         </button>
 
 
-
-        <!-- ============================== -->
         <!-- 查看簽到紀錄 -->
-        <!-- ============================== -->
 
         <button
             type="button"
@@ -372,27 +345,25 @@
             style="margin-top:20px;"
         ></div>
 
-
     </div>
-
 
 </div>
 
 
-
 <!-- ================================================== -->
-<!-- ⚠️ 這裡非常重要 -->
-<!-- ================================================== -->
-<!-- 一定要先載入 supabase.js -->
-<!-- 再載入 script.js -->
+<!-- 很重要：順序不能反 -->
 <!-- ================================================== -->
 
+<!-- Supabase 官方 JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- 你的 Supabase 設定 -->
 <script src="supabase.js"></script>
 
+<!-- 你的主要程式 -->
 <script src="script.js"></script>
 
 
 </body>
 
 </html>
-```
