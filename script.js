@@ -1,7 +1,6 @@
-```javascript
 // ==================================================
 // 社課簽到系統 script.js
-// 固定系級版本
+// 完整版
 // ==================================================
 
 
@@ -11,6 +10,7 @@
 
 const SUPABASE_URL =
     "https://yefgqzjlddszhnaawvjv.supabase.co";
+
 
 const SUPABASE_KEY =
     "sb_publishable_zjfUBdwwbVfNl1Z52-4vug_dBdwI2Vy";
@@ -29,18 +29,6 @@ console.log(
 
 
 // ==================================================
-// 固定系級
-// ==================================================
-//
-// 如果以後要改系級
-// 只需要修改這一行
-//
-
-const FIXED_DEPARTMENT =
-    "工業一丙";
-
-
-// ==================================================
 // 全域變數
 // ==================================================
 
@@ -48,9 +36,11 @@ let todayCourses = [];
 
 let selectedCourse = null;
 
+let currentStudent = null;
+
 
 // ==================================================
-// 1. 載入今天課程
+// 1. 載入今天所有課程
 // ==================================================
 
 async function loadCourse() {
@@ -116,7 +106,8 @@ async function loadCourse() {
                 .order(
                     "checkin_start",
                     {
-                        ascending: true
+                        ascending:
+                            true
                     }
                 );
 
@@ -147,7 +138,22 @@ async function loadCourse() {
         ) {
 
             courseInfo.innerHTML =
-                "📚 今天沒有社課";
+                `
+                <div class="course-title">
+                    📚 今日社課
+                </div>
+
+                <div
+                    style="
+                        text-align:center;
+                        color:#666;
+                        padding:20px 0;
+                    "
+                >
+                    今天沒有社課
+                </div>
+                `;
+
 
             return;
         }
@@ -156,17 +162,12 @@ async function loadCourse() {
         let html = "";
 
 
-        html += `
-            <div
-                style="
-                    font-size:18px;
-                    font-weight:bold;
-                    margin-bottom:15px;
-                "
-            >
+        html +=
+            `
+            <div class="course-title">
                 📚 今日社課
             </div>
-        `;
+            `;
 
 
         todayCourses.forEach(
@@ -216,46 +217,39 @@ async function loadCourse() {
                     );
 
 
-                html += `
-
+                html +=
+                    `
                     <button
                         type="button"
                         id="courseButton${index}"
                         class="course-button"
                     >
 
-                        <span
-                            class="course-name"
-                        >
-                            📚 ${
+                        <span class="course-name">
+                            📚 ${escapeHtml(
                                 course.course_name
-                            }
+                            )}
                         </span>
 
-                        <span
-                            class="course-time"
-                        >
-                            ⏰ ${startText}
-                            ～ ${endText}
+                        <span class="course-time">
+                            ⏰ ${startText} ～ ${endText}
                         </span>
 
                     </button>
-
-                `;
+                    `;
             }
         );
 
 
-        html += `
-
+        html +=
+            `
             <div
                 id="selectedCourseText"
                 class="selected-course"
             >
                 👆 請先選擇要簽到的課程
             </div>
-
-        `;
+            `;
 
 
         courseInfo.innerHTML =
@@ -263,7 +257,7 @@ async function loadCourse() {
 
 
         // ==================================================
-        // 綁定課程按鈕
+        // 綁定按鈕
         // ==================================================
 
         todayCourses.forEach(
@@ -277,25 +271,48 @@ async function loadCourse() {
 
 
                 if (!button) {
-
                     return;
                 }
 
 
                 button.addEventListener(
                     "click",
-                    function() {
+                    function(event) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
 
                         console.log(
-                            "📱 點擊課程：",
+                            "🖱️ 點擊課程：",
                             index
                         );
 
 
-                        selectCourse(
+                        selectCourse(index);
+                    }
+                );
+
+
+                button.addEventListener(
+                    "touchend",
+                    function(event) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+                        console.log(
+                            "📱 Touch 課程：",
                             index
                         );
 
+
+                        selectCourse(index);
+                    },
+                    {
+                        passive:
+                            false
                     }
                 );
 
@@ -305,7 +322,10 @@ async function loadCourse() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "❌ loadCourse 發生錯誤：",
+            error
+        );
 
 
         courseInfo.innerHTML =
@@ -328,6 +348,7 @@ function selectCourse(index) {
 
 
     if (
+        !todayCourses ||
         !todayCourses[index]
     ) {
 
@@ -345,11 +366,13 @@ function selectCourse(index) {
 
     console.log(
         "✅ 已選擇：",
-        selectedCourse.course_name
+        selectedCourse
     );
 
 
-    // 更新按鈕外觀
+    // ==================================================
+    // 更新按鈕
+    // ==================================================
 
     todayCourses.forEach(
         function(course, i) {
@@ -362,9 +385,13 @@ function selectCourse(index) {
 
 
             if (!button) {
-
                 return;
             }
+
+
+            button.classList.remove(
+                "selected"
+            );
 
 
             if (i === index) {
@@ -372,17 +399,15 @@ function selectCourse(index) {
                 button.classList.add(
                     "selected"
                 );
-
-            } else {
-
-                button.classList.remove(
-                    "selected"
-                );
             }
 
         }
     );
 
+
+    // ==================================================
+    // 顯示選擇
+    // ==================================================
 
     const selectedText =
         document.getElementById(
@@ -394,7 +419,9 @@ function selectCourse(index) {
 
         selectedText.innerHTML =
             "✅ 已選擇：<strong>" +
-            selectedCourse.course_name +
+            escapeHtml(
+                selectedCourse.course_name
+            ) +
             "</strong>";
     }
 }
@@ -418,6 +445,12 @@ async function login() {
         );
 
 
+    const departmentElement =
+        document.getElementById(
+            "loginDepartment"
+        );
+
+
     if (!nameElement) {
 
         alert(
@@ -438,6 +471,16 @@ async function login() {
     }
 
 
+    if (!departmentElement) {
+
+        alert(
+            "❌ 找不到系級輸入框！"
+        );
+
+        return;
+    }
+
+
     const name =
         nameElement.value.trim();
 
@@ -445,6 +488,14 @@ async function login() {
     const studentId =
         studentIdElement.value.trim();
 
+
+    const department =
+        departmentElement.value.trim();
+
+
+    // ==================================================
+    // 檢查
+    // ==================================================
 
     if (name === "") {
 
@@ -466,7 +517,29 @@ async function login() {
     }
 
 
+    if (department === "") {
+
+        alert(
+            "❌ 請輸入系級！"
+        );
+
+        return;
+    }
+
+
+    console.log(
+        "👤 登入：",
+        name,
+        studentId,
+        department
+    );
+
+
     try {
+
+        // ==================================================
+        // 查詢社員
+        // ==================================================
 
         const {
             data: student,
@@ -484,13 +557,16 @@ async function login() {
 
         if (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
 
 
             alert(
                 "❌ 查詢社員失敗！\n\n" +
                 error.message
             );
+
 
             return;
         }
@@ -510,7 +586,6 @@ async function login() {
                     .from("students")
                     .insert([
                         {
-
                             name:
                                 name,
 
@@ -518,7 +593,7 @@ async function login() {
                                 studentId,
 
                             department:
-                                FIXED_DEPARTMENT,
+                                department,
 
                             plan:
                                 "",
@@ -548,6 +623,10 @@ async function login() {
             }
 
 
+            currentStudent =
+                newStudent;
+
+
             showStudent(
                 newStudent
             );
@@ -555,22 +634,15 @@ async function login() {
 
             alert(
                 "🎉 歡迎加入社課！\n\n" +
-
                 "姓名：" +
                 newStudent.name +
-
                 "\n" +
-
                 "學號：" +
                 newStudent["student ID"] +
-
                 "\n" +
-
                 "系級：" +
                 newStudent.department +
-
                 "\n" +
-
                 "目前堂數：" +
                 (
                     Number(
@@ -589,14 +661,58 @@ async function login() {
         // 已存在
         // ==================================================
 
+        currentStudent =
+            student;
+
+
+        // 如果資料庫原本沒有系級
+        // 就把這次輸入的系級補進去
+
+        if (
+            !student.department ||
+            student.department.trim() === ""
+        ) {
+
+            const {
+                data:
+                    updatedStudent,
+                error:
+                    updateError
+            } =
+                await db
+                    .from("students")
+                    .update({
+                        department:
+                            department
+                    })
+                    .eq(
+                        "id",
+                        student.id
+                    )
+                    .select()
+                    .single();
+
+
+            if (!updateError &&
+                updatedStudent
+            ) {
+
+                currentStudent =
+                    updatedStudent;
+            }
+        }
+
+
         showStudent(
-            student
+            currentStudent
         );
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
 
         alert(
@@ -651,15 +767,18 @@ function showStudent(student) {
 
     welcomeText.innerHTML =
         "👋 歡迎 " +
-        student.name +
+        escapeHtml(
+            student.name
+        );
+
+
+    lessonText.innerHTML =
+        "🎓 系級：" +
+        escapeHtml(
+            student.department ||
+            "尚未設定"
+        ) +
         "<br>" +
-        "<span style='font-size:14px;color:#666;'>" +
-        "系級：" +
-        FIXED_DEPARTMENT +
-        "</span>";
-
-
-    lessonText.innerText =
         "目前剩餘堂數：" +
         (
             Number(
@@ -668,6 +787,10 @@ function showStudent(student) {
         ) +
         " 堂";
 
+
+    // ==================================================
+    // 如果今天有課但還沒選
+    // ==================================================
 
     if (
         todayCourses.length > 0 &&
@@ -717,6 +840,10 @@ async function checkIn() {
     }
 
 
+    // ==================================================
+    // 必須選課
+    // ==================================================
+
     if (!selectedCourse) {
 
         alert(
@@ -734,7 +861,7 @@ async function checkIn() {
 
 
         // ==================================================
-        // 檢查簽到時間
+        // 檢查時間
         // ==================================================
 
         const now =
@@ -759,12 +886,10 @@ async function checkIn() {
 
             alert(
                 "⏰ 尚未開始簽到！\n\n" +
-
                 "課程：" +
                 course.course_name +
                 "\n" +
-
-                "開始時間：" +
+                "開始：" +
                 startTime.toLocaleString(
                     "zh-TW",
                     {
@@ -785,12 +910,10 @@ async function checkIn() {
 
             alert(
                 "⛔ 簽到時間已截止！\n\n" +
-
                 "課程：" +
                 course.course_name +
                 "\n" +
-
-                "截止時間：" +
+                "截止：" +
                 endTime.toLocaleString(
                     "zh-TW",
                     {
@@ -811,7 +934,8 @@ async function checkIn() {
 
         const {
             data: student,
-            error: studentError
+            error:
+                studentError
         } =
             await db
                 .from("students")
@@ -825,10 +949,16 @@ async function checkIn() {
 
         if (studentError) {
 
+            console.error(
+                studentError
+            );
+
+
             alert(
                 "❌ 查詢社員失敗！\n\n" +
                 studentError.message
             );
+
 
             return;
         }
@@ -840,6 +970,7 @@ async function checkIn() {
                 "❌ 找不到社員資料！\n\n" +
                 "請先按「繼續」登入。"
             );
+
 
             return;
         }
@@ -861,6 +992,7 @@ async function checkIn() {
                 "❌ 目前沒有剩餘堂數！"
             );
 
+
             return;
         }
 
@@ -870,8 +1002,10 @@ async function checkIn() {
         // ==================================================
 
         const {
-            data: existingAttendance,
-            error: attendanceCheckError
+            data:
+                existingAttendance,
+            error:
+                attendanceCheckError
         } =
             await db
                 .from("attendance")
@@ -891,14 +1025,18 @@ async function checkIn() {
                 .maybeSingle();
 
 
-        if (
-            attendanceCheckError
-        ) {
+        if (attendanceCheckError) {
+
+            console.error(
+                attendanceCheckError
+            );
+
 
             alert(
                 "❌ 簽到紀錄查詢失敗！\n\n" +
                 attendanceCheckError.message
             );
+
 
             return;
         }
@@ -909,8 +1047,11 @@ async function checkIn() {
         ) {
 
             alert(
-                "⚠️ 你已經簽到過這堂課了！"
+                "⚠️ 你已經簽到過這堂課了！\n\n" +
+                "課程：" +
+                course.course_name
             );
+
 
             return;
         }
@@ -925,7 +1066,8 @@ async function checkIn() {
 
 
         const {
-            error: updateError
+            error:
+                updateError
         } =
             await db
                 .from("students")
@@ -941,10 +1083,16 @@ async function checkIn() {
 
         if (updateError) {
 
+            console.error(
+                updateError
+            );
+
+
             alert(
                 "❌ 扣堂失敗！\n\n" +
                 updateError.message
             );
+
 
             return;
         }
@@ -962,7 +1110,6 @@ async function checkIn() {
                 .from("attendance")
                 .insert([
                     {
-
                         "student ID":
                             studentId,
 
@@ -978,6 +1125,14 @@ async function checkIn() {
         if (
             insertAttendanceError
         ) {
+
+            console.error(
+                insertAttendanceError
+            );
+
+
+            // 簽到紀錄失敗
+            // 把堂數加回去
 
             await db
                 .from("students")
@@ -1013,7 +1168,13 @@ async function checkIn() {
 
         if (lessonText) {
 
-            lessonText.innerText =
+            lessonText.innerHTML =
+                "🎓 系級：" +
+                escapeHtml(
+                    student.department ||
+                    "尚未設定"
+                ) +
+                "<br>" +
                 "目前剩餘堂數：" +
                 newLesson +
                 " 堂";
@@ -1022,36 +1183,31 @@ async function checkIn() {
 
         alert(
             "🎉 簽到成功！\n\n" +
-
             "姓名：" +
             student.name +
-
             "\n" +
-
             "學號：" +
             student["student ID"] +
-
             "\n" +
-
             "系級：" +
-            FIXED_DEPARTMENT +
-
+            (
+                student.department ||
+                ""
+            ) +
             "\n" +
-
             "課程：" +
             course.course_name +
-
             "\n" +
-
-            "使用：1 堂" +
-
-            "\n" +
-
+            "使用：1 堂\n" +
             "剩餘：" +
             newLesson +
             " 堂"
         );
 
+
+        // ==================================================
+        // 清除選課
+        // ==================================================
 
         selectedCourse =
             null;
@@ -1070,191 +1226,31 @@ async function checkIn() {
         }
 
 
+        todayCourses.forEach(
+            function(course, index) {
+
+                const button =
+                    document.getElementById(
+                        "courseButton" +
+                        index
+                    );
+
+
+                if (button) {
+
+                    button.classList.remove(
+                        "selected"
+                    );
+                }
+            }
+        );
+
+
     } catch (error) {
 
-        console.error(error);
-
-
-        alert(
-            "❌ 發生錯誤！\n\n" +
-            error.message
-        );
-    }
-}
-
-
-// ==================================================
-// 6. 管理員登入
-// ==================================================
-
-function adminLogin() {
-
-    const passwordElement =
-        document.getElementById(
-            "adminPassword"
-        );
-
-
-    if (!passwordElement) {
-
-        return;
-    }
-
-
-    const password =
-        passwordElement.value;
-
-
-    const ADMIN_PASSWORD =
-        "06020602";
-
-
-    if (
-        password ===
-        ADMIN_PASSWORD
-    ) {
-
-        document.getElementById(
-            "adminArea"
-        ).style.display =
-            "block";
-
-
-        alert(
-            "🔓 管理員登入成功！"
-        );
-
-
-        passwordElement.value =
-            "";
-
-
-    } else {
-
-        alert(
-            "❌ 管理員密碼錯誤！"
-        );
-    }
-}
-
-
-// ==================================================
-// 7. 管理員：查詢社員
-// ==================================================
-
-async function showStudentAdmin() {
-
-    const input =
-        document.getElementById(
-            "adminStudentId"
-        );
-
-
-    if (!input) {
-
-        alert(
-            "❌ 找不到管理員學號輸入框！"
-        );
-
-        return;
-    }
-
-
-    const studentId =
-        input.value.trim();
-
-
-    if (
-        studentId === ""
-    ) {
-
-        alert(
-            "❌ 請輸入社員學號！"
-        );
-
-        return;
-    }
-
-
-    try {
-
-        const {
-            data: student,
+        console.error(
             error
-        } =
-            await db
-                .from("students")
-                .select("*")
-                .eq(
-                    "student ID",
-                    studentId
-                )
-                .maybeSingle();
-
-
-        if (error) {
-
-            alert(
-                "❌ 查詢失敗！\n\n" +
-                error.message
-            );
-
-            return;
-        }
-
-
-        if (!student) {
-
-            alert(
-                "❌ 找不到這個社員！"
-            );
-
-            return;
-        }
-
-
-        alert(
-            "👤 社員資料\n\n" +
-
-            "姓名：" +
-            student.name +
-
-            "\n" +
-
-            "學號：" +
-            student["student ID"] +
-
-            "\n" +
-
-            "系級：" +
-            (
-                student.department ||
-                FIXED_DEPARTMENT
-            ) +
-
-            "\n" +
-
-            "方案：" +
-            (
-                student.plan ||
-                "尚未設定"
-            ) +
-
-            "\n" +
-
-            "剩餘堂數：" +
-            (
-                Number(
-                    student.lesson
-                ) || 0
-            ) +
-            " 堂"
         );
-
-
-    } catch (error) {
-
-        console.error(error);
 
 
         alert(
@@ -1266,305 +1262,7 @@ async function showStudentAdmin() {
 
 
 // ==================================================
-// 8. 管理員：增加 10 堂
-// ==================================================
-
-async function addTenLessons() {
-
-    const input =
-        document.getElementById(
-            "adminStudentId"
-        );
-
-
-    if (!input) {
-
-        alert(
-            "❌ 找不到社員學號輸入框！"
-        );
-
-        return;
-    }
-
-
-    const studentId =
-        input.value.trim();
-
-
-    if (
-        studentId === ""
-    ) {
-
-        alert(
-            "❌ 請輸入社員學號！"
-        );
-
-        return;
-    }
-
-
-    try {
-
-        const {
-            data: student,
-            error
-        } =
-            await db
-                .from("students")
-                .select("*")
-                .eq(
-                    "student ID",
-                    studentId
-                )
-                .maybeSingle();
-
-
-        if (error) {
-
-            alert(
-                "❌ 查詢社員失敗！\n\n" +
-                error.message
-            );
-
-            return;
-        }
-
-
-        if (!student) {
-
-            alert(
-                "❌ 找不到這個社員！"
-            );
-
-            return;
-        }
-
-
-        const oldLesson =
-            Number(
-                student.lesson
-            ) || 0;
-
-
-        const newLesson =
-            oldLesson + 10;
-
-
-        const {
-            error:
-                updateError
-        } =
-            await db
-                .from("students")
-                .update({
-
-                    plan:
-                        "10堂",
-
-                    lesson:
-                        newLesson
-
-                })
-                .eq(
-                    "id",
-                    student.id
-                );
-
-
-        if (updateError) {
-
-            alert(
-                "❌ 增加 10 堂失敗！\n\n" +
-                updateError.message
-            );
-
-            return;
-        }
-
-
-        alert(
-            "✅ 增加 10 堂成功！\n\n" +
-
-            "姓名：" +
-            student.name +
-
-            "\n" +
-
-            "學號：" +
-            student["student ID"] +
-
-            "\n" +
-
-            "目前剩餘：" +
-            newLesson +
-            " 堂"
-        );
-
-
-    } catch (error) {
-
-        console.error(error);
-
-
-        alert(
-            "❌ 發生錯誤！\n\n" +
-            error.message
-        );
-    }
-}
-
-
-// ==================================================
-// 9. 管理員：增加 1 堂
-// ==================================================
-
-async function addOneLesson() {
-
-    const input =
-        document.getElementById(
-            "adminStudentId"
-        );
-
-
-    if (!input) {
-
-        alert(
-            "❌ 找不到社員學號輸入框！"
-        );
-
-        return;
-    }
-
-
-    const studentId =
-        input.value.trim();
-
-
-    if (
-        studentId === ""
-    ) {
-
-        alert(
-            "❌ 請輸入社員學號！"
-        );
-
-        return;
-    }
-
-
-    try {
-
-        const {
-            data: student,
-            error
-        } =
-            await db
-                .from("students")
-                .select("*")
-                .eq(
-                    "student ID",
-                    studentId
-                )
-                .maybeSingle();
-
-
-        if (error) {
-
-            alert(
-                "❌ 查詢社員失敗！\n\n" +
-                error.message
-            );
-
-            return;
-        }
-
-
-        if (!student) {
-
-            alert(
-                "❌ 找不到這個社員！"
-            );
-
-            return;
-        }
-
-
-        const oldLesson =
-            Number(
-                student.lesson
-            ) || 0;
-
-
-        const newLesson =
-            oldLesson + 1;
-
-
-        const {
-            error:
-                updateError
-        } =
-            await db
-                .from("students")
-                .update({
-
-                    plan:
-                        "單堂",
-
-                    lesson:
-                        newLesson
-
-                })
-                .eq(
-                    "id",
-                    student.id
-                );
-
-
-        if (updateError) {
-
-            alert(
-                "❌ 增加 1 堂失敗！\n\n" +
-                updateError.message
-            );
-
-            return;
-        }
-
-
-        alert(
-            "✅ 增加 1 堂成功！\n\n" +
-
-            "姓名：" +
-            student.name +
-
-            "\n" +
-
-            "學號：" +
-            student["student ID"] +
-
-            "\n" +
-
-            "目前剩餘：" +
-            newLesson +
-            " 堂"
-        );
-
-
-    } catch (error) {
-
-        console.error(error);
-
-
-        alert(
-            "❌ 發生錯誤！\n\n" +
-            error.message
-        );
-    }
-}
-
-
-// ==================================================
-// 10. 管理員：建立課程
+// 6. 管理員：建立課程
 // ==================================================
 
 async function createCourse() {
@@ -1574,15 +1272,18 @@ async function createCourse() {
             "courseName"
         );
 
+
     const courseDateElement =
         document.getElementById(
             "courseDate"
         );
 
+
     const checkinStartElement =
         document.getElementById(
             "checkinStart"
         );
+
 
     const checkinEndElement =
         document.getElementById(
@@ -1598,7 +1299,7 @@ async function createCourse() {
     ) {
 
         alert(
-            "❌ 找不到課程欄位！"
+            "❌ 找不到課程輸入欄位！"
         );
 
         return;
@@ -1673,7 +1374,6 @@ async function createCourse() {
                 .from("courses")
                 .insert([
                     {
-
                         course_name:
                             courseName,
 
@@ -1693,10 +1393,16 @@ async function createCourse() {
 
         if (error) {
 
+            console.error(
+                error
+            );
+
+
             alert(
                 "❌ 建立課程失敗！\n\n" +
                 error.message
             );
+
 
             return;
         }
@@ -1704,17 +1410,12 @@ async function createCourse() {
 
         alert(
             "🎉 課程建立成功！\n\n" +
-
             "課程：" +
             data.course_name +
-
             "\n" +
-
             "日期：" +
             data.course_date +
-
             "\n" +
-
             "簽到時間：" +
             checkinStart +
             " ～ " +
@@ -1728,11 +1429,14 @@ async function createCourse() {
         courseNameElement.value =
             "";
 
+
         courseDateElement.value =
             "";
 
+
         checkinStartElement.value =
             "";
+
 
         checkinEndElement.value =
             "";
@@ -1740,7 +1444,520 @@ async function createCourse() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
+
+
+        alert(
+            "❌ 發生錯誤！\n\n" +
+            error.message
+        );
+    }
+}
+
+
+// ==================================================
+// 7. 管理員登入
+// ==================================================
+
+function adminLogin() {
+
+    const passwordElement =
+        document.getElementById(
+            "adminPassword"
+        );
+
+
+    if (!passwordElement) {
+
+        alert(
+            "❌ 找不到管理員密碼輸入框！"
+        );
+
+        return;
+    }
+
+
+    const password =
+        passwordElement.value;
+
+
+    const ADMIN_PASSWORD =
+        "06020602";
+
+
+    if (
+        password ===
+        ADMIN_PASSWORD
+    ) {
+
+        const adminArea =
+            document.getElementById(
+                "adminArea"
+            );
+
+
+        if (adminArea) {
+
+            adminArea.style.display =
+                "block";
+        }
+
+
+        alert(
+            "🔓 管理員登入成功！"
+        );
+
+
+        passwordElement.value =
+            "";
+
+
+    } else {
+
+        alert(
+            "❌ 管理員密碼錯誤！"
+        );
+    }
+}
+
+
+// ==================================================
+// 8. 管理員：查詢社員
+// ==================================================
+
+async function showStudentAdmin() {
+
+    const input =
+        document.getElementById(
+            "adminStudentId"
+        );
+
+
+    if (!input) {
+
+        alert(
+            "❌ 找不到管理員學號輸入框！"
+        );
+
+        return;
+    }
+
+
+    const studentId =
+        input.value.trim();
+
+
+    if (
+        studentId === ""
+    ) {
+
+        alert(
+            "❌ 請輸入社員學號！"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: student,
+            error
+        } =
+            await db
+                .from("students")
+                .select("*")
+                .eq(
+                    "student ID",
+                    studentId
+                )
+                .maybeSingle();
+
+
+        if (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "❌ 查詢失敗！\n\n" +
+                error.message
+            );
+
+
+            return;
+        }
+
+
+        if (!student) {
+
+            alert(
+                "❌ 找不到這個社員！"
+            );
+
+
+            return;
+        }
+
+
+        alert(
+            "👤 社員資料\n\n" +
+            "姓名：" +
+            student.name +
+            "\n" +
+            "學號：" +
+            student["student ID"] +
+            "\n" +
+            "系級：" +
+            (
+                student.department ||
+                "尚未設定"
+            ) +
+            "\n" +
+            "方案：" +
+            (
+                student.plan ||
+                "尚未設定"
+            ) +
+            "\n" +
+            "剩餘堂數：" +
+            (
+                Number(
+                    student.lesson
+                ) || 0
+            ) +
+            " 堂"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        alert(
+            "❌ 發生錯誤！\n\n" +
+            error.message
+        );
+    }
+}
+
+
+// ==================================================
+// 9. 管理員：增加 10 堂
+// ==================================================
+
+async function addTenLessons() {
+
+    const input =
+        document.getElementById(
+            "adminStudentId"
+        );
+
+
+    if (!input) {
+
+        alert(
+            "❌ 找不到社員學號輸入框！"
+        );
+
+        return;
+    }
+
+
+    const studentId =
+        input.value.trim();
+
+
+    if (
+        studentId === ""
+    ) {
+
+        alert(
+            "❌ 請輸入社員學號！"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: student,
+            error
+        } =
+            await db
+                .from("students")
+                .select("*")
+                .eq(
+                    "student ID",
+                    studentId
+                )
+                .maybeSingle();
+
+
+        if (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "❌ 查詢社員失敗！\n\n" +
+                error.message
+            );
+
+
+            return;
+        }
+
+
+        if (!student) {
+
+            alert(
+                "❌ 找不到這個社員！\n\n" +
+                "學號：" +
+                studentId
+            );
+
+
+            return;
+        }
+
+
+        const oldLesson =
+            Number(
+                student.lesson
+            ) || 0;
+
+
+        const newLesson =
+            oldLesson + 10;
+
+
+        const {
+            error:
+                updateError
+        } =
+            await db
+                .from("students")
+                .update({
+                    plan:
+                        "10堂",
+
+                    lesson:
+                        newLesson
+                })
+                .eq(
+                    "id",
+                    student.id
+                );
+
+
+        if (updateError) {
+
+            console.error(
+                updateError
+            );
+
+
+            alert(
+                "❌ 增加 10 堂失敗！\n\n" +
+                updateError.message
+            );
+
+
+            return;
+        }
+
+
+        alert(
+            "✅ 增加 10 堂成功！\n\n" +
+            "姓名：" +
+            student.name +
+            "\n" +
+            "學號：" +
+            student["student ID"] +
+            "\n" +
+            "目前剩餘：" +
+            newLesson +
+            " 堂"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        alert(
+            "❌ 發生錯誤！\n\n" +
+            error.message
+        );
+    }
+}
+
+
+// ==================================================
+// 10. 管理員：增加 1 堂
+// ==================================================
+
+async function addOneLesson() {
+
+    const input =
+        document.getElementById(
+            "adminStudentId"
+        );
+
+
+    if (!input) {
+
+        alert(
+            "❌ 找不到社員學號輸入框！"
+        );
+
+        return;
+    }
+
+
+    const studentId =
+        input.value.trim();
+
+
+    if (
+        studentId === ""
+    ) {
+
+        alert(
+            "❌ 請輸入社員學號！"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: student,
+            error
+        } =
+            await db
+                .from("students")
+                .select("*")
+                .eq(
+                    "student ID",
+                    studentId
+                )
+                .maybeSingle();
+
+
+        if (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "❌ 查詢社員失敗！\n\n" +
+                error.message
+            );
+
+
+            return;
+        }
+
+
+        if (!student) {
+
+            alert(
+                "❌ 找不到這個社員！\n\n" +
+                "學號：" +
+                studentId
+            );
+
+
+            return;
+        }
+
+
+        const oldLesson =
+            Number(
+                student.lesson
+            ) || 0;
+
+
+        const newLesson =
+            oldLesson + 1;
+
+
+        const {
+            error:
+                updateError
+        } =
+            await db
+                .from("students")
+                .update({
+                    plan:
+                        "單堂",
+
+                    lesson:
+                        newLesson
+                })
+                .eq(
+                    "id",
+                    student.id
+                );
+
+
+        if (updateError) {
+
+            console.error(
+                updateError
+            );
+
+
+            alert(
+                "❌ 增加 1 堂失敗！\n\n" +
+                updateError.message
+            );
+
+
+            return;
+        }
+
+
+        alert(
+            "✅ 增加 1 堂成功！\n\n" +
+            "姓名：" +
+            student.name +
+            "\n" +
+            "學號：" +
+            student["student ID"] +
+            "\n" +
+            "目前剩餘：" +
+            newLesson +
+            " 堂"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
 
 
         alert(
@@ -1764,6 +1981,10 @@ async function loadAttendance() {
 
 
     if (!attendanceList) {
+
+        console.error(
+            "❌ 找不到 attendanceList"
+        );
 
         return;
     }
@@ -1793,9 +2014,15 @@ async function loadAttendance() {
 
         if (error) {
 
+            console.error(
+                error
+            );
+
+
             attendanceList.innerHTML =
                 "❌ 載入失敗：<br>" +
                 error.message;
+
 
             return;
         }
@@ -1807,9 +2034,16 @@ async function loadAttendance() {
         ) {
 
             attendanceList.innerHTML =
-                "<p style='text-align:center;'>" +
-                "目前還沒有簽到紀錄。" +
-                "</p>";
+                `
+                <p
+                    style="
+                        text-align:center;
+                    "
+                >
+                    目前還沒有簽到紀錄。
+                </p>
+                `;
+
 
             return;
         }
@@ -1819,19 +2053,34 @@ async function loadAttendance() {
 
 
         html +=
-            "<p style='text-align:center;'>" +
-            "目前共有 <strong>" +
-            data.length +
-            "</strong> 筆簽到紀錄" +
-            "</p>";
+            `
+            <p
+                style="
+                    text-align:center;
+                "
+            >
+                目前共有
+                <strong>
+                    ${data.length}
+                </strong>
+                筆簽到紀錄
+            </p>
+            `;
 
 
         data.forEach(
             function(record) {
 
-                const time =
+                let time =
+                    "未知";
+
+
+                if (
                     record.checkin_time
-                        ? new Date(
+                ) {
+
+                    time =
+                        new Date(
                             record.checkin_time
                         ).toLocaleString(
                             "zh-TW",
@@ -1839,20 +2088,22 @@ async function loadAttendance() {
                                 timeZone:
                                     "Asia/Taipei"
                             }
-                        )
-                        : "未知";
+                        );
+                }
 
 
-                html += `
-
+                html +=
+                    `
                     <div
                         class="attendance-card"
                     >
 
                         <strong>
                             📚 ${
-                                record.course_name ||
-                                "未知課程"
+                                escapeHtml(
+                                    record.course_name ||
+                                    "未知課程"
+                                )
                             }
                         </strong>
 
@@ -1860,26 +2111,33 @@ async function loadAttendance() {
 
                         學號：
                         ${
-                            record["student ID"] ||
-                            ""
+                            escapeHtml(
+                                record["student ID"] ||
+                                ""
+                            )
                         }
 
                         <br>
 
                         日期：
                         ${
-                            record.course_date ||
-                            ""
+                            escapeHtml(
+                                record.course_date ||
+                                ""
+                            )
                         }
 
                         <br>
 
                         簽到時間：
-                        ${time}
+                        ${
+                            escapeHtml(
+                                time
+                            )
+                        }
 
                     </div>
-
-                `;
+                    `;
             }
         );
 
@@ -1890,7 +2148,9 @@ async function loadAttendance() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
 
         attendanceList.innerHTML =
@@ -1901,13 +2161,63 @@ async function loadAttendance() {
 
 
 // ==================================================
-// 12. 網頁載入
+// 12. HTML 安全處理
 // ==================================================
 
-loadCourse();
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+    }
+
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
+
+
+// ==================================================
+// 13. 網頁載入
+// ==================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        console.log(
+            "✅ 網頁載入完成"
+        );
+
+
+        loadCourse();
+
+    }
+);
 
 
 console.log(
-    "✅ 社課簽到系統已載入"
+    "✅ 完整版 script.js 已載入"
 );
-```
