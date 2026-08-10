@@ -8,7 +8,8 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_zjfUBdwwbVfNl1Z52-4vug_dBdwI2Vy";
 
-const db =
+// 建立 Supabase 連線
+window.db =
     window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
