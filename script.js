@@ -1,4 +1,3 @@
-```javascript
 // ==================================================
 // 社課簽到系統
 // 2堂 / 4堂 / 吃到飽 完整版
@@ -348,13 +347,21 @@ function selectCourse(index) {
 async function login() {
 
     const nameInput =
-        document.getElementById("name");
+        document.getElementById(
+            "name"
+        );
+
 
     const studentIdInput =
-        document.getElementById("loginStudentId");
+        document.getElementById(
+            "loginStudentId"
+        );
+
 
     const departmentInput =
-        document.getElementById("department");
+        document.getElementById(
+            "department"
+        );
 
 
     if (!nameInput) {
@@ -380,8 +387,10 @@ async function login() {
     const name =
         nameInput.value.trim();
 
+
     const studentId =
         studentIdInput.value.trim();
+
 
     const department =
         departmentInput
@@ -546,7 +555,6 @@ async function login() {
 
 
         // 更新系級
-
         if (
             !student.department ||
             student.department !== department
@@ -592,7 +600,6 @@ async function login() {
 
 
         // 更新姓名
-
         if (
             student.name !== name
         ) {
@@ -676,6 +683,7 @@ function showStudent(student) {
         );
 
 
+    // ★ 修正 HTML 真正的 ID
     const studentDepartment =
         document.getElementById(
             "studentDepartmentText"
@@ -967,19 +975,11 @@ async function checkIn() {
                             "student ID":
                                 studentId,
 
-                            student_name:
-                                student.name,
-
                             course_name:
                                 course.course_name,
 
                             course_date:
                                 course.course_date
-
-                            // checkin_time
-                            // 不需要填
-                            // Supabase DEFAULT now()
-                            // 會自動產生
                         }
                     ]);
 
@@ -1140,19 +1140,11 @@ async function checkIn() {
                         "student ID":
                             studentId,
 
-                        student_name:
-                            student.name,
-
                         course_name:
                             course.course_name,
 
                         course_date:
                             course.course_date
-
-                        // checkin_time
-                        // 不需要填
-                        // Supabase DEFAULT now()
-                        // 會自動產生
                     }
                 ]);
 
@@ -1164,10 +1156,7 @@ async function checkIn() {
             );
 
 
-            // ==================================================
-            // 簽到失敗 → 加回堂數
-            // ==================================================
-
+            // 加回堂數
             await db
                 .from("students")
                 .update({
@@ -1900,10 +1889,6 @@ async function createCourse() {
 
     try {
 
-        // ==================================================
-        // 台灣時間 +08:00
-        // ==================================================
-
         const startDateTime =
             courseDate +
             "T" +
@@ -2136,9 +2121,9 @@ async function loadAttendance() {
                     <div class="attendance-card">
 
                         <strong>
-                            👤 ${
-                                record.student_name ||
-                                "未知姓名"
+                            📚 ${
+                                record.course_name ||
+                                "未知課程"
                             }
                         </strong>
 
@@ -2152,15 +2137,7 @@ async function loadAttendance() {
 
                         <br>
 
-                        📚 課程：
-                        ${
-                            record.course_name ||
-                            "未知課程"
-                        }
-
-                        <br>
-
-                        📅 日期：
+                        日期：
                         ${
                             record.course_date ||
                             ""
@@ -2168,7 +2145,7 @@ async function loadAttendance() {
 
                         <br>
 
-                        ⏰ 簽到時間：
+                        簽到時間：
                         ${time}
 
                     </div>
@@ -2210,4 +2187,3 @@ document.addEventListener(
         loadCourse();
     }
 );
-```
